@@ -154,7 +154,6 @@
       { input : "2011/6/2", format : "YYYY/M/D" },
       { input : "2011/6/20", format : "YYYY/M/D" },
       { input : "2011/6/20 4PM", format : "YYYY/M/D hA" },
-      { input : "2011/6/20 4PM", format : "YYYY/M/D hhA" },
       { input : "2011/6/20 12PM", format : "YYYY/M/D hA" },
       { input : "12PM", format : "hA" },
       { input : "12:30 PM", format : "h:m A" },
@@ -175,9 +174,19 @@
       { input : "12:05:30 +0400", format : "hh:mm:s ZZ" },
       { input : "12:05:30 -0400", format : "hh:mm:ss ZZ" }
     ];
+
+    var badtimes = [
+      { input : "2011", format: "D/M/YYYY" },
+      { input : "2011/6/20 4PM", format : "YYYY/M/D hhA" }
+    ];
+
     _.each(testtimes, function(t) {
       ok(Dataset.types.time.test(t.input, {format : t.format}), t.input);
       ok(Dataset.types.time.coerce(t.input, {format:t.format}).valueOf(), moment(t.input, t.format).valueOf());
+    });
+
+    _.each(badtimes, function(t) {
+      ok(!Dataset.types.time.test(t.input, {format : t.format}), t.input);
     });
   });
 
